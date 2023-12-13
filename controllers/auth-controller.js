@@ -12,7 +12,9 @@ const register=async (req,res)=>{
          const data=await User.create({username,email,phone,password})
         res.status(200).json({msg:"registratin succesful ",token:await data.generateToken(),userId:data._id.toString()})
     } catch (error) {
-        res.status(500).send({msg:"internal server error"})
+        //error middleware ko lagaye h 
+        // res.status(500).send({msg:"internal server error"})
+        next()
     }
 }
 
