@@ -29,7 +29,6 @@ const userSchema =new mongoose.Schema({
 
 userSchema.pre("save",async function(next){
     // console.log("pre method",this)
-
     const user=this;
     if(!user.isModified("password")){
         next();
@@ -39,11 +38,14 @@ userSchema.pre("save",async function(next){
         const hash_password=await bcrypt.hash(user.password,saltRound);
         user.password=hash_password;
     } catch (error) {
-        next(error);
-        
+        next(error);  
     }
 })
+//compare password
 
+userSchema.methods.comparePassword=async function(password){
+    return  bcrypt.compare(password,this.password);
+};
 //json web token
 userSchema.methods.generateToken=async function (){
     try {

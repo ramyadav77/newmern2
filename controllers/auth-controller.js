@@ -1,9 +1,7 @@
 const User = require("../models/user-model");
 const bcrypt=require('bcrypt');
 
-
 const register=async (req,res)=>{
-
     try {
         // console.log(req.body)
          const{username,email,phone,password}=req.body;
@@ -26,7 +24,8 @@ const login=async(req,res)=>{
         if(!userExist){
             return res.status(400).json({msg:"invalid credential"})
         }
-        const user=await bcrypt.compare(password,userExist.password);
+        // const user=await bcrypt.compare(password,userExist.password);
+        const user=await userExist.comparePassword(password);
         if(user){
             res.status(200).json({
                 msg:"login succesfully",
@@ -37,8 +36,8 @@ const login=async(req,res)=>{
             res.status(401).json({msg:"invalid dono email or pass"})
         }
     } catch (error) {
-        res.status(500).json(error.message)
-        
+        //error.message se actual error dekh sakte h
+        res.status(500).json(error.message)    
     }
 }
 
